@@ -25,7 +25,9 @@
                 </ComboBox>
                 <Button Content="一键生草" VerticalAlignment="Center" Name="BtnStart" Click="BtnStart_Click"/>
                 <Button Content="开始写入" VerticalAlignment="Center" Name="BtnExport" Click="BtnExport_Click"/>
-                <TextBlock Text="DeepL Key：" VerticalAlignment="Center"/>
+                <TextBlock Text="ID：" VerticalAlignment="Center"/>
+                <TextBox VerticalAlignment="Center" Width="100" Name="TextSetID"/>
+                <TextBlock Text="Key：" VerticalAlignment="Center"/>
                 <TextBox VerticalAlignment="Center" Width="100" Name="TextSetkey"/>
             </StackPanel>
         </StackPanel>

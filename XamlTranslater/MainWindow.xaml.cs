@@ -78,77 +78,63 @@ namespace XamlTranslater
             }
         }
 
-        private async Task<string> TranslateContent(string content, string targetLanguage)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                var apiKey = TextSetkey.Text;
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", apiKey);
-
-                var requestBody = new Dictionary<string, string>
-                {
-                    { "text", content },
-                    { "target_lang", targetLanguage }
-                };
-
-                var response = await httpClient.PostAsync("https://api-free.deepl.com/v2/translate", new FormUrlEncodedContent(requestBody));
-
-                if (response.StatusCode !=HttpStatusCode.OK)
-                {
-                    MessageBox.Show($"获取翻译失败：{response.ToString()}");
-                    response.EnsureSuccessStatusCode();
-                }
-
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var translationResult = JsonConvert.DeserializeObject<DeepLResponse>(jsonResponse);
-                return translationResult.Translations[0].Text;
-            }
-        }
-
-        public class DeepLResponse
-        {
-            public List<Translation> Translations { get; set; }
-        }
-
-        public class Translation
-        {
-            public string Text { get; set; }
-        }
-
         private async void BtnStart_Click(object sender, RoutedEventArgs e)
         {
+            var translater = new Translater.Ali(TextSetID.Text,TextSetkey.Text);
             if (string.IsNullOrEmpty(filePath))
             {
                 MessageBox.Show("请先选择文件");
                 return;
             }
-            foreach (var item in ListViewTranslation.Items.OfType<ContentStructure>().ToList())
+            var newList = ListViewTranslation.Items.OfType<ContentStructure>().ToList();
+            foreach (var item in newList)
             {
-                item.TranslatedText = await TranslateContent(item.OriginalContent,ComboLang.Text);
+                //item.TranslatedText = "测试加入" + item.Key;
+                //continue;
+                item.TranslatedText = await translater.GetTranslation(item.OriginalContent,ComboLang.Text);
+                if (item.TranslatedText == item.OriginalContent)
+                {
+                    if (MessageBox.Show("内容疑似未翻译成功，是否继续？", "翻译疑似有问题", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
             }
+            ListViewTranslation.ItemsSource = newList;
             MessageBox.Show("所有生草已完成！");
         }
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
-            if( MessageBox.Show("即将修改当前文件，是否继续？","确认",MessageBoxButton.YesNo) != MessageBoxResult.OK)
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return;
+            }
+            if( MessageBox.Show("即将修改当前文件，是否继续？","确认",MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
                 return;
             }
             XDocument xdoc = XDocument.Load(filePath);
+            int ModifyNum = 0;
             foreach (var item in ListViewTranslation.Items.OfType<ContentStructure>().ToList())
             {
-                var elementToModify = xdoc.Descendants().Where(e =>e.Attributes("x:Key").Any(a => a.Value == item.Key)).FirstOrDefault();
-                if (elementToModify != null)
+                try
                 {
-                    var contentElement = elementToModify.Element("Content");
-                    if (contentElement != null)
+                    var elementToModify = xdoc.Descendants().ToList().Where(e => e.Attributes().ToList()[0].Value == item.Key).FirstOrDefault();
+                    if (elementToModify != null)
                     {
-                        contentElement.Value = item.TranslatedText;
+                        elementToModify.Value = item.TranslatedText;
+                        ModifyNum++;
                     }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(),"替换翻译字符失败",MessageBoxButton.OK,MessageBoxImage.Error);
+                    return;
                 }
             }
             xdoc.Save(filePath);
+            MessageBox.Show($"共修改 {ModifyNum} 项","完成！");
         }
     }
 }
