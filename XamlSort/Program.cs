@@ -52,7 +52,7 @@ namespace XamlSorter
                 }
                 else
                 {
-                    sortedElements.Add(elementsWithKeys.First());
+                    sortedElements.Add(target.First());
                 }
             }
 
