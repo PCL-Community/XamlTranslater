@@ -45,7 +45,15 @@ namespace XamlSorter
             // 根据x:Key属性对元素进行排序
             foreach (var item in CorrectKeyOrder)
             {
-                sortedElements.Add(elementsWithKeys.Where(e => e.Attribute(xNamespace + "Key").Value.Equals(item)).First());
+                var target = elementsWithKeys.Where(e => e.Attribute(xNamespace + "Key").Value.Equals(item));
+                if (target is null || !target.Any()) //目标文件中没有此项
+                {
+                    sortedElements.Add(elementsExampleWithKeys.Where(e => e.Attribute(xNamespace + "Key").Value.Equals(item)).First());
+                }
+                else
+                {
+                    sortedElements.Add(elementsWithKeys.First());
+                }
             }
 
             // 创建一个新的XElement，用于构建排序后的XAML
