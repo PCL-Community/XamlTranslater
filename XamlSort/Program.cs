@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml;
 
 namespace XamlSorter
 {
@@ -59,15 +60,21 @@ namespace XamlSorter
                     }
                 }
 
-                // 创建一个新的XElement，用于构建排序后的XAML
+                // 创建一个新的XElement，用在构建排序后的XAML
                 XElement sortedXamlRoot = new XElement(xamlRoot.Name,
                     xamlRoot.Attributes(),
                     sortedElements
                 );
 
-                // 保存排序后的XAML到新文件
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.IndentChars = "    ";  // Indent 4 Spaces
+
                 XDocument sortedXamlDoc = new XDocument(sortedXamlRoot);
-                sortedXamlDoc.Save(inputFilePath);
+                using (XmlWriter writer = XmlTextWriter.Create(inputFilePath, settings))
+                {
+                    sortedXamlDoc.Save(writer);
+                }
                 Console.WriteLine($"已对 {inputFilePath} 进行排序");
             }
         }
