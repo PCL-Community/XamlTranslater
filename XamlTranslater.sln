@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XamlTranslater", "XamlTranslater\XamlTranslater.csproj", "{EE7B972C-FFAC-41F7-9D41-6B61FEC33F27}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlSort", "XamlSort\XamlSort.csproj", "{8F3BCEB2-EAE4-47E7-9344-F7A78EA6F989}"
 EndProject
 Global
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EE7B972C-FFAC-41F7-9D41-6B61FEC33F27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE7B972C-FFAC-41F7-9D41-6B61FEC33F27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE7B972C-FFAC-41F7-9D41-6B61FEC33F27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE7B972C-FFAC-41F7-9D41-6B61FEC33F27}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F3BCEB2-EAE4-47E7-9344-F7A78EA6F989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F3BCEB2-EAE4-47E7-9344-F7A78EA6F989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F3BCEB2-EAE4-47E7-9344-F7A78EA6F989}.Release|Any CPU.ActiveCfg = Release|Any CPU

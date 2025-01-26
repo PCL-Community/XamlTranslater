@@ -15,7 +15,7 @@ namespace XamlSorter
             List<string> inputFilePaths = new List<string>();
             inputFilePaths = Directory.EnumerateFiles("Lang", "*.xaml").ToList();
             // XAML样板文件路径
-            string exampleFilePath = "zh_CN.xaml";
+            string exampleFilePath = "zh-CN.xaml";
             List<string> CorrectKeyOrder = new List<string>();
 
             XNamespace xNamespace = "http://schemas.microsoft.com/winfx/2006/xaml";
@@ -67,6 +67,7 @@ namespace XamlSorter
                 );
 
                 XmlWriterSettings settings = new XmlWriterSettings();
+                settings.OmitXmlDeclaration = true;
                 settings.Indent = true;
                 settings.IndentChars = "    ";  // Indent 4 Spaces
 
